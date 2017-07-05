@@ -8,3 +8,4 @@ media
 .idea
 *.py[cod]
 *$py.class
+/run/migrations/
