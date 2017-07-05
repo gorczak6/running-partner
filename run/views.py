@@ -2,6 +2,7 @@ from django.http.response import Http404
 from django.shortcuts import render
 
 # Create your views here.
+from django.views.generic import CreateView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,7 +15,7 @@ class TreningsView(APIView):
     def get(self, request, format=None):
         trenings = Trening.objects.all()
         serializer = TreningSerializer(trenings, many=True, context={"request": request})
-        return Response(serializer.data)
+        return Response(data=serializer.data)
 
 
 class TreningView(APIView):
@@ -76,3 +77,10 @@ class PersonView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class AddTreningView(CreateView):
+#     model = Trening
+#     exclude = ['added_date', 'author']
+#     success_url = '/'
+

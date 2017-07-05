@@ -26,19 +26,24 @@ class Person(models.Model):
         return self.name
 
 
-class Trening(models.Model):
-    date = models.DateField()
-    time = models.TimeField()
-    city = models.CharField(max_length=64)
-    street = models.CharField(max_length=64)
-    number = models.CharField(max_length=32, blank=True)
-    distance = models.CharField(max_length=8)
-    pace = models.IntegerField(choices=PACE)
-    description = models.TextField(max_length=400)
+class Comments(models.Model):
+    author = models.ForeignKey(Person, verbose_name="autor")
+    content = models.TextField(max_length=400, verbose_name="komentarz")
     added_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Person)
+
+
+class Trening(models.Model):
+    date = models.DateField(verbose_name="data")
+    time = models.TimeField(verbose_name="godzina")
+    city = models.CharField(max_length=64, verbose_name="Miejscowość")
+    street = models.CharField(max_length=64, verbose_name="Ulica/miejsce")
+    number = models.CharField(max_length=32, blank=True, verbose_name="Numer")
+    distance = models.CharField(max_length=8, verbose_name="Dystans")
+    pace = models.IntegerField(choices=PACE, verbose_name="Tempo")
+    description = models.TextField(max_length=400, verbose_name="Krótki opis")
+    added_date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Person, verbose_name="autor")
+    comments = models.ManyToManyField(Comments)
 
     def __str__(self):
         return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)
-
-
