@@ -3,11 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <script src="static/js.app.js"></script>
+    <script src="static/js.jquery.js"></script>
 </head>
 <body>
-{% block content %}
-
-{% endblock %}
+<div>
+    {% block header %}
+    <h2>Witaj</h2>
+    {% endblock %}
+</div>
+<div>
+    {% block content %}
+    Homepage
+    {% endblock %}
+</div>
+<div>
+    {% block footer %}
+    Footer
+    {% endblock %}
+</div>
 
 </body>
 </html>

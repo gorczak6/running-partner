@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from run.models import Person, Trening
+from run.models import Person, Training
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TreningSerializer(serializers.ModelSerializer):
+class TrainingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Trening
+        model = Training
         exclude = ['added_date']

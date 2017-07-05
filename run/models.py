@@ -31,8 +31,11 @@ class Comments(models.Model):
     content = models.TextField(max_length=400, verbose_name="komentarz")
     added_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{} - {} - {}".format(self.author, self.content, self.added_date)
 
-class Trening(models.Model):
+
+class Training(models.Model):
     date = models.DateField(verbose_name="data")
     time = models.TimeField(verbose_name="godzina")
     city = models.CharField(max_length=64, verbose_name="Miejscowość")
