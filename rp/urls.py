@@ -21,6 +21,8 @@ from run import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^trenings/', views.TreningsView.as_view(), name='trenings'),
-    url(r'^trening/(?P<pk>(\d)+)', views.TreningView.as_view(), name='trening'),
+    url(r'^trenings/$', views.TreningsView.as_view(), name='trenings'),
+    url(r'^trening/(?P<id>(\d)+)', views.TreningView.as_view(), name='trening'),
+    url(r'^users/$', views.PeopleView.as_view(), name='users'),
+    url(r'^users/(?P<pk>(\d)+)', views.PersonView.as_view(), name='user'),
 ]

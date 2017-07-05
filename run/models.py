@@ -19,8 +19,11 @@ PACE = ((1, "wolniej niż 7:00/km"),
 
 class Person(models.Model):
     name = models.CharField(max_length=128, verbose_name="Imię/Pseudonim")
-    sex = models.IntegerField(choices=((1, "male"),
-                                       (2, "female")), verbose_name="Płeć")
+    sex = models.IntegerField(choices=((1, "mężczyzna"),
+                                       (2, "kobieta")), verbose_name="Płeć")
+
+    def __str__(self):
+        return self.name
 
 
 class Trening(models.Model):
@@ -28,11 +31,14 @@ class Trening(models.Model):
     time = models.TimeField()
     city = models.CharField(max_length=64)
     street = models.CharField(max_length=64)
-    number = models.CharField(max_length=32, blank=None)
+    number = models.CharField(max_length=32, blank=True)
     distance = models.CharField(max_length=8)
     pace = models.IntegerField(choices=PACE)
     description = models.TextField(max_length=400)
     added_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Person)
+
+    def __str__(self):
+        return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)
 
 
