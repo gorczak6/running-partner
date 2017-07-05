@@ -12,14 +12,14 @@ from run.models import Training, Person
 from run.serializers import TrainingSerializer, PersonSerializer
 
 
-class TrainingsView(APIView):
+class TrainingsViewAPI(APIView):
     def get(self, request, format=None):
         trainings = Training.objects.all()
         serializer = TrainingSerializer(trainings, many=True, context={"request": request})
         return Response(data=serializer.data)
 
 
-class TrainingView(APIView):
+class TrainingViewAPI(APIView):
 
         def get_object(self, pk):
             try:
@@ -53,14 +53,14 @@ class TrainingView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PeopleView(APIView):
+class PeopleViewAPI(APIView):
     def get(self, request, format=None):
         people = Person.objects.all()
         serializer = PersonSerializer(people, many=True, context={"request": request})
         return Response(serializer.data)
 
 
-class PersonView(APIView):
+class PersonViewAPI(APIView):
     def get_object(self, pk):
         try:
             return Person.objects.get(pk=pk)
@@ -88,4 +88,10 @@ class PersonView(APIView):
 class HomeView(View):
     def get(self, request):
         trainings = Training.objects.all()
-        return render(request, "base.html", {"request": request})
+        return render(request, "home.html", {"trainings": trainings})
+
+
+class TrainingView(View):
+    def get(self, request, training_id):
+        training = Training.objects.get(pk=training_id)
+        return render(request, "training.html", {"request": request, "training": training})

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} Biegasz za mną? {% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Kiedy</th>
+            <th>Dystans</th>
+            <th>Dodał</th>
+        </tr>
+        {% for training in trainings %}
+        <tr>
+            <td>{{ training.date }} - {{ training.time }}</td>
+            <td>{{ training.distance }}</td>
+            <td>{{ training.author }}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+
+{% endblock %}
