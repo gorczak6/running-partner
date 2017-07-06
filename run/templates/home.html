@@ -11,14 +11,16 @@
             <th><p>Dodał</p></th>
         </tr>
         {% for training in trainings %}
-        <tr>
-            <td><a href="/training/{{training.id}}">{{ training.date }} - {{ training.time }}</a></td>
-            <td>{{ training.distance }}</td>
-            <td>{{ training.author }}</td>
-        </tr>
+                <tr>
+                    <td><a href="/training/{{training.id}}">{{ training.date }} - {{ training.time }}</a></td>
+                    <td>{{ training.distance }}</td>
+                    <td>{{ training.author }}</td>
+                </tr>
+
 
         {% endfor %}
     </table>
 
 
 {% endblock %}
+

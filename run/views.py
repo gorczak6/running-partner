@@ -1,3 +1,5 @@
+import datetime
+
 from django.http.response import Http404
 from django.shortcuts import render
 
@@ -80,14 +82,9 @@ class PersonViewAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class AddTrainingView(CreateView):
-#     model = Training
-#     exclude = ['added_date', 'author']
-#     success_url = '/'
-
 class HomeView(View):
     def get(self, request):
-        trainings = Training.objects.all()
+        trainings = Training.objects.order_by('date', 'time').filter(date__gte=datetime.datetime.now())
         return render(request, "home.html", {"trainings": trainings})
 
 
@@ -98,3 +95,9 @@ class TrainingView(View):
         return render(request, "training-details.html", {"request": request,
                                                          "training": training,
                                                          "comments": comments})
+
+
+class AddTrainingView(CreateView):
+    model = Training
+    fields = ['date', 'time', 'city', 'street', 'number', 'distance', 'pace', 'description', 'author']
+    success_url = '/'

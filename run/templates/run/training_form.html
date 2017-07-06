@@ -1,0 +1,10 @@
+{% extends "../base.html" %}
+{% block add_training %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <button class="btn" type="submit">Dodaj</button>
+</form>
+
+{% endblock %}
