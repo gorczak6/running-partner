@@ -46,7 +46,7 @@ class Training(models.Model):
     description = models.TextField(max_length=400, verbose_name="Krótki opis")
     added_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Person, verbose_name="autor")
-    comments = models.ManyToManyField(Comments)
+    comments = models.ManyToManyField(Comments, blank=True)
 
     def __str__(self):
         return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)

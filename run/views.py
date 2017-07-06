@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from run.models import Training, Person
+from run.models import Training, Person, Comments
 from run.serializers import TrainingSerializer, PersonSerializer
 
 
@@ -94,4 +94,7 @@ class HomeView(View):
 class TrainingView(View):
     def get(self, request, training_id):
         training = Training.objects.get(pk=training_id)
-        return render(request, "training.html", {"request": request, "training": training})
+        comments = Comments.objects.filter(pk=training_id)
+        return render(request, "training-details.html", {"request": request,
+                                                         "training": training,
+                                                         "comments": comments})

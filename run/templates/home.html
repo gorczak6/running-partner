@@ -3,20 +3,22 @@
 {% block title %} Biegasz za mną? {% endblock %}
 
 {% block content %}
-    <table>
+<h3>Proponowane biegi </h3>
+    <table class="table">
         <tr>
-            <th>Kiedy</th>
-            <th>Dystans</th>
-            <th>Dodał</th>
+            <th><p>Kiedy</p></th>
+            <th><p>Dystans</p></th>
+            <th><p>Dodał</p></th>
         </tr>
         {% for training in trainings %}
         <tr>
-            <td>{{ training.date }} - {{ training.time }}</td>
+            <td><a href="/training/{{training.id}}">{{ training.date }} - {{ training.time }}</a></td>
             <td>{{ training.distance }}</td>
             <td>{{ training.author }}</td>
         </tr>
 
         {% endfor %}
     </table>
+
 
 {% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <th>Kiedy</th>
+        <td>{{ training.date }} - {{ training.time }}</td>
+    </tr>
+    <tr>
+        <th>Gdzie</th>
+        <td>{{ training.city }} - {{ training.street }} - {{ training.number }}</td>
+    </tr>
+    <tr>
+        <th>Dystans i tempo</th>
+        <td>{{ training.distance }} - {{ training.get_pace_display }}</td>
+    </tr>
+    <tr>
+        <th>Szczegóły</th>
+        <td>{{ training.description }}</td>
+    </tr>
+    <tr>
+        <th>Dodano</th>
+        <td>{{ training.added_date }} przez: {{ training.author }}</td>
+    </tr>
+    <tr>
+
+</table>
+<hr>
+<p>Komentarze/zgłoszenia:</p>
+    {% block comments %}
+
+        {% for comment in comments %}
+
+            <strong>{{ comment.author }} - {{ comment.added_date }}</strong><br>
+            {{ comment.content }}
+        {% endfor %}
+
+    {% endblock %}
+
+
+{% endblock %}
+
