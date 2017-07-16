@@ -1,7 +1,8 @@
 import datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
@@ -10,6 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from run.forms import AddCommentForm
 from run.models import Training, Person, Comments
 from run.serializers import TrainingSerializer, PersonSerializer
 
@@ -22,37 +24,36 @@ class TrainingsViewAPI(APIView):
 
 
 class TrainingViewAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return Training.objects.get(pk=pk)
+        except Training.DoesNotExist:
+            raise Http404
 
-        def get_object(self, pk):
-            try:
-                return Training.objects.get(pk=pk)
-            except Training.DoesNotExist:
-                raise Http404
+    def get(self, request, pk, format=None):
+        training = self.get_object(pk)
+        serializer = TrainingSerializer(training, context={"request": request})
+        return Response(serializer.data)
 
-        def get(self, request, pk, format=None):
-            training = self.get_object(pk)
-            serializer = TrainingSerializer(training, context={"request": request})
+    def delete(self, request, pk, format=None):
+        training = self.get_object(pk)
+        training.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, pk, format=None):
+        training = self.get_object(pk)
+        serializer = TrainingSerializer(training, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        def delete(self, request, pk, format=None):
-            training = self.get_object(pk)
-            training.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        def put(self, request, pk, format=None):
-            training = self.get_object(pk)
-            serializer = TrainingSerializer(training, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        def post(self, request, format=None):
-            serializer = TrainingSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        serializer = TrainingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PeopleViewAPI(APIView):
@@ -88,16 +89,44 @@ class HomeView(View):
         return render(request, "home.html", {"trainings": trainings})
 
 
-class TrainingView(View):
+class TrainingView(LoginRequiredMixin, View):
+    template_name = 'templates/registration/login.html'
+
     def get(self, request, training_id):
         training = Training.objects.get(pk=training_id)
         comments = Comments.objects.filter(pk=training_id)
         return render(request, "training-details.html", {"request": request,
                                                          "training": training,
-                                                         "comments": comments})
+                                                         "comments": comments,
+                                                         "training_id": training_id})
 
 
 class AddTrainingView(CreateView):
     model = Training
     fields = ['date', 'time', 'city', 'street', 'number', 'distance', 'pace', 'description', 'author']
     success_url = '/'
+
+
+class AddCommentView(View):
+    def get(self, request, training_id):
+        form = AddCommentForm
+        training = Training.objects.get(pk=training_id)
+        ctx = {"training": training,
+               "training_id": training_id,
+               "form": form}
+        return render(request, "add_comment.html", ctx)
+
+    def post(self, request, training_id):
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            # author = request.user.username
+            result = Comments.objects.create(content=content,
+                                             author=request.user,
+                                             training_id=training_id)
+
+
+            ctx = {"form": form,
+                   "result": result
+                   }
+        return render(request, "training-details.html", ctx)

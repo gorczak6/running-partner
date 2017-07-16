@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -5,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-   <!-- Latest compiled and minified CSS -->
-        <!--<link rel="stylesheet" href="static/css/bootstrap.min.css">-->
 
-<!-- jQuery library -->
-        <script src="static/js/jquery.js"></script>
 
-<!-- Latest compiled JavaScript -->
-        <!--<script src="static/js/bootstrap.min.js"></script>-->
+    <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script>
+  $(function() {
+    $( "#id_date" ).datepicker({dateFormat: "yy-mm-dd"});
+  } );
+  </script>
+
 </head>
 <body>
 <div class="jumbotron text-center">
@@ -25,7 +29,7 @@
     <div class="row">
         <div class="col-lg-3">
             <p>Nie znalazłeś interesującego treningu?</p>
-            <a href="{% url 'add-training' %}"><button class="btn">Dodaj własny!!!</button></a>
+            <a href="{% url 'add-training' %}"><button class="btn btn-primary">Dodaj własny!!!</button></a>
         </div>
         <div class="col-lg-6">
 
@@ -37,17 +41,34 @@
 
             {% endblock %}
 
+            {% block login %}
+
+            {% endblock %}
+
+            {% block add-comment %}
+
+            {% endblock %}
+
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-3">
+            {% if user.is_authenticated %}
+                <p>Witaj <strong>{{user.username}}</strong><br>
+                <a href="/logout"><button class="btn">Wyloguj</button></a></p>
+            {% else %}
+                <p>Chcesz zgłosić swój udział w treningu lub dodać własny bieg?</p>
+                <a href="/login"><button class="btn btn-primary">Zaloguj się!</button></a>
+                <a href="/login"><button class="btn btn-primary">Zaloguj przez Facebook</button></a>
+
+                <hr><br><p>Nie zarejestrowałeś się jeszcze? Zrób to teraz!</p>
+                <a href="/register"><button class="btn btn-primary">Rejestracja</button></a>
+            {% endif %}
+        </div>
 
     </div>
 
 </div>
-<div>
-    {% block footer %}
 
-    {% endblock %}
-</div>
+
 
 </body>
 </html>

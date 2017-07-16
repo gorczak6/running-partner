@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 PACE = ((1, "wolniej niż 7:00/km"),
         (2, "6:45 - 7:00/km"),
@@ -26,15 +28,6 @@ class Person(models.Model):
         return self.name
 
 
-class Comments(models.Model):
-    author = models.ForeignKey(Person, verbose_name="autor")
-    content = models.TextField(max_length=400, verbose_name="komentarz")
-    added_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "{} - {} - {}".format(self.author, self.content, self.added_date)
-
-
 class Training(models.Model):
     date = models.DateField(verbose_name="data")
     time = models.TimeField(verbose_name="godzina")
@@ -45,8 +38,25 @@ class Training(models.Model):
     pace = models.IntegerField(choices=PACE, verbose_name="Tempo")
     description = models.TextField(max_length=400, verbose_name="Krótki opis")
     added_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Person, verbose_name="autor")
-    comments = models.ManyToManyField(Comments, blank=True)
+    author = models.ForeignKey(User, verbose_name="autor")
+    # comments = models.ForeignKey(Comments)
 
     def __str__(self):
         return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)
+
+
+class Comments(models.Model):
+    author = models.ForeignKey(User, verbose_name="autor")
+    content = models.TextField(max_length=400, verbose_name="komentarz")
+    added_date = models.DateTimeField(auto_now_add=True)
+    training = models.ForeignKey(Training, blank=True, null=True)
+
+    def __str__(self):
+        return "{} - {} - {}".format(self.author, self.content, self.added_date)
+
+
+class UserLogin(models.Model):
+    username = models.CharField(max_length=64)
+    password = models.CharField(max_length=64)
+
+

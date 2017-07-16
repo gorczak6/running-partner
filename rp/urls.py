@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 
 from run import views
@@ -21,11 +21,13 @@ from run import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', views.HomeView.as_view(), name="home"),
-    url(r'^api/trainings/$', views.TrainingsViewAPI.as_view(), name='trainings'),
-    url(r'^api/training/(?P<id>(\d)+)', views.TrainingViewAPI.as_view(), name='training'),
-    url(r'^api/users/$', views.PeopleViewAPI.as_view(), name='users'),
-    url(r'^api/users/(?P<pk>(\d)+)', views.PersonViewAPI.as_view(), name='user'),
-    url(r'^training/(?P<training_id>(\d)+)', views.TrainingView.as_view(), name='training'),
-    url(r'^add-training/$', views.AddTrainingView.as_view(), name='add-training'),
+    url(r'^api/trainings$', views.TrainingsViewAPI.as_view(), name='trainings'),
+    url(r'^api/training/(?P<id>(\d)+)$', views.TrainingViewAPI.as_view(), name='training'),
+    url(r'^api/users$', views.PeopleViewAPI.as_view(), name='users'),
+    url(r'^api/users/(?P<pk>(\d)+)$', views.PersonViewAPI.as_view(), name='user'),
+    url(r'^training/(?P<training_id>(\d)+)$', views.TrainingView.as_view(), name='training'),
+    url(r'^add-training$', views.AddTrainingView.as_view(), name='add-training'),
+    url(r'^training/(?P<training_id>(\d)+)/add-comment', views.AddCommentView.as_view(), name='add-comment'),
 ]

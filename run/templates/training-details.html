@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+
+
 {% block content %}
 <table class="table">
     <tr>
@@ -36,6 +38,18 @@
         {% endfor %}
 
     {% endblock %}
+
+{% block add_comment %}
+<a href="{% url 'add-comment' training_id=training_id %}" >
+    <button>Dodaj komentarz</button></a>
+   <!--<form action="/" method="post">-->
+    <!--{% csrf_token %}-->
+    <!--<label for="comment"><textarea name="comment" id="comment" cols="30" rows="5"></textarea></label><br>-->
+    <!--<button class="btn btn-primary" type="submit">Dodaj</button>-->
+<!--</form>-->
+
+
+{% endblock %}
 
 
 {% endblock %}
