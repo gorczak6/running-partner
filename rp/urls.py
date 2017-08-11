@@ -23,6 +23,7 @@ from run import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^signup/$', core_views.signup, name='signup'),
+    url('', include('social_django.urls', namespace='social')),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', views.HomeView.as_view(), name="home"),
     url(r'^api/trainings$', views.TrainingsViewAPI.as_view(), name='trainings'),
