@@ -1,6 +1,6 @@
-from django.forms import ModelForm, forms, CharField
+from django.forms import ModelForm
 
-from run.models import UserLogin
+from run.models import UserLogin, Comment
 
 
 class LoginForm(ModelForm):
@@ -10,5 +10,8 @@ class LoginForm(ModelForm):
         fields = ['username', 'password']
 
 
-class AddCommentForm(forms.Form):
-    content = CharField(label='komentarz')
+class CommentForm(ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ['author', 'text']

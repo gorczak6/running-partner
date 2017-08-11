@@ -24,10 +24,10 @@ urlpatterns = [
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', views.HomeView.as_view(), name="home"),
     url(r'^api/trainings$', views.TrainingsViewAPI.as_view(), name='trainings'),
-    url(r'^api/training/(?P<id>(\d)+)$', views.TrainingViewAPI.as_view(), name='training'),
+    url(r'^api/training/(?P<id>(\d)+)$', views.TrainingViewAPI.as_view(), name='training-api'),
     url(r'^api/users$', views.PeopleViewAPI.as_view(), name='users'),
     url(r'^api/users/(?P<pk>(\d)+)$', views.PersonViewAPI.as_view(), name='user'),
-    url(r'^training/(?P<training_id>(\d)+)$', views.TrainingView.as_view(), name='training'),
+    url(r'^training/(?P<training_id>(\d)+)$', views.TrainingView.as_view(), name='training-details'),
     url(r'^add-training$', views.AddTrainingView.as_view(), name='add-training'),
-    url(r'^training/(?P<training_id>(\d)+)/add-comment', views.AddCommentView.as_view(), name='add-comment'),
+    url(r'^training/(?P<training_id>\d+)/comment/$', views.add_comment_to_training, name='add_comment_to_training')
 ]

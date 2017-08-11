@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.views import View
@@ -11,8 +11,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from run.forms import AddCommentForm
-from run.models import Training, Person, Comments
+from run.forms import CommentForm
+from run.models import Training, Person, Comment
 from run.serializers import TrainingSerializer, PersonSerializer
 
 
@@ -94,10 +94,8 @@ class TrainingView(LoginRequiredMixin, View):
 
     def get(self, request, training_id):
         training = Training.objects.get(pk=training_id)
-        comments = Comments.objects.filter(pk=training_id)
         return render(request, "training-details.html", {"request": request,
                                                          "training": training,
-                                                         "comments": comments,
                                                          "training_id": training_id})
 
 
@@ -107,26 +105,40 @@ class AddTrainingView(CreateView):
     success_url = '/'
 
 
-class AddCommentView(View):
-    def get(self, request, training_id):
-        form = AddCommentForm
-        training = Training.objects.get(pk=training_id)
-        ctx = {"training": training,
-               "training_id": training_id,
-               "form": form}
-        return render(request, "add_comment.html", ctx)
+# class AddCommentView(View):
+#     def get(self, request, training_id):
+#         form = AddCommentForm
+#         training = Training.objects.get(pk=training_id)
+#         ctx = {"training": training,
+#                "training_id": training_id,
+#                "form": form}
+#         return render(request, "add_comment.html", ctx)
+#
+#     def post(self, request, training_id):
+#         form = AddCommentForm(request.POST)
+#         if form.is_valid():
+#             content = form.cleaned_data['content']
+#             # author = request.user.username
+#             result = Comments.objects.create(content=content,
+#                                              author=request.user,
+#                                              training_id=training_id)
+#
+#             ctx = {"form": form,
+#                    "result": result,
+#                    "training_id": training_id
+#                    }
+#         return redirect(request, 'training-details', ctx)
+#         # return render(request, "training-details.html", ctx)
 
-    def post(self, request, training_id):
-        form = AddCommentForm(request.POST)
+def add_comment_to_training(request, training_id):
+    training = get_object_or_404(Training, pk=training_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
         if form.is_valid():
-            content = form.cleaned_data['content']
-            # author = request.user.username
-            result = Comments.objects.create(content=content,
-                                             author=request.user,
-                                             training_id=training_id)
-
-
-            ctx = {"form": form,
-                   "result": result
-                   }
-        return render(request, "training-details.html", ctx)
+            comment = form.save(commit=False)
+            comment.training = training
+            comment.save()
+            return redirect('training-details', training_id=training_id)
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment_to_training.html', {'form': form})

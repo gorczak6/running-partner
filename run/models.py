@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 PACE = ((1, "wolniej niż 7:00/km"),
         (2, "6:45 - 7:00/km"),
@@ -39,20 +39,19 @@ class Training(models.Model):
     description = models.TextField(max_length=400, verbose_name="Krótki opis")
     added_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, verbose_name="autor")
-    # comments = models.ForeignKey(Comments)
 
     def __str__(self):
         return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)
 
 
-class Comments(models.Model):
-    author = models.ForeignKey(User, verbose_name="autor")
-    content = models.TextField(max_length=400, verbose_name="komentarz")
-    added_date = models.DateTimeField(auto_now_add=True)
-    training = models.ForeignKey(Training, blank=True, null=True)
+class Comment(models.Model):
+    author = models.ForeignKey('auth.User', verbose_name='autor')
+    text = models.TextField(max_length=400, verbose_name='komentarz')
+    created_date = models.DateTimeField(default=timezone.now)
+    training = models.ForeignKey('Training', related_name='comments', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} - {} - {}".format(self.author, self.content, self.added_date)
+        return "{} - {} - {}".format(self.author, self.txt, self.created_date)
 
 
 class UserLogin(models.Model):

@@ -128,3 +128,6 @@ STATIC_ROOT = [
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
+

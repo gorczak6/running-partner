@@ -28,29 +28,19 @@
 
 </table>
 <hr>
-<p>Komentarze/zgłoszenia:</p>
-    {% block comments %}
 
-        {% for comment in comments %}
+<a class="btn btn-primary" href="{% url 'add_comment_to_training' training_id=training_id %}" >Dodaj komentarz</a>
+{% for comment in training.comments.all %}
+    <div class="comment">
+        <div class="date">{{ comment.created_date }}</div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
 
-            <strong>{{ comment.author }} - {{ comment.added_date }}</strong><br>
-            {{ comment.content }}
-        {% endfor %}
-
-    {% endblock %}
-
-{% block add_comment %}
-<a href="{% url 'add-comment' training_id=training_id %}" >
-    <button>Dodaj komentarz</button></a>
-   <!--<form action="/" method="post">-->
-    <!--{% csrf_token %}-->
-    <!--<label for="comment"><textarea name="comment" id="comment" cols="30" rows="5"></textarea></label><br>-->
-    <!--<button class="btn btn-primary" type="submit">Dodaj</button>-->
-<!--</form>-->
-
-
-{% endblock %}
-
+    </div>
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
+<a href="{% url 'training-details' training_id=training_id %}">Liczba komentarzy: {{ training.comments.count }}</a>
 
 {% endblock %}
 
