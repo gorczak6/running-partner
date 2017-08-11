@@ -38,7 +38,7 @@
 
     </div>
 {% empty %}
-    <p>No comments here yet :(</p>
+    <p>Nie ma tu jeszcze żadnych komentarzy - bądź  pierwszy! :)</p>
 {% endfor %}
 <a href="{% url 'training-details' training_id=training_id %}">Liczba komentarzy: {{ training.comments.count }}</a>
 

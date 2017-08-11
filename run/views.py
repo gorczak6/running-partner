@@ -1,5 +1,7 @@
 import datetime
 
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -142,3 +144,18 @@ def add_comment_to_training(request, training_id):
     else:
         form = CommentForm()
     return render(request, 'add_comment_to_training.html', {'form': form})
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})

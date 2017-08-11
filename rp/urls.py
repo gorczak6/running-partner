@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from run import views as core_views
 
 from run import views
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^signup/$', core_views.signup, name='signup'),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', views.HomeView.as_view(), name="home"),
     url(r'^api/trainings$', views.TrainingsViewAPI.as_view(), name='trainings'),
@@ -29,5 +31,6 @@ urlpatterns = [
     url(r'^api/users/(?P<pk>(\d)+)$', views.PersonViewAPI.as_view(), name='user'),
     url(r'^training/(?P<training_id>(\d)+)$', views.TrainingView.as_view(), name='training-details'),
     url(r'^add-training$', views.AddTrainingView.as_view(), name='add-training'),
-    url(r'^training/(?P<training_id>\d+)/comment/$', views.add_comment_to_training, name='add_comment_to_training')
+    url(r'^training/(?P<training_id>\d+)/comment/$', views.add_comment_to_training, name='add_comment_to_training'),
+
 ]
