@@ -38,14 +38,14 @@ class Training(models.Model):
     pace = models.IntegerField(choices=PACE, verbose_name="Tempo")
     description = models.TextField(max_length=400, verbose_name="Krótki opis")
     added_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, verbose_name="autor")
+    author = models.ForeignKey(User, verbose_name="autor", on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} - {} - {} - {} - {}".format(self.date, self.time, self.city, self.distance, self.author)
 
 
 class Comment(models.Model):
-    author = models.ForeignKey('auth.User', verbose_name='autor')
+    author = models.ForeignKey('auth.User', verbose_name='autor', on_delete=models.DO_NOTHING)
     text = models.TextField(max_length=400, verbose_name='komentarz')
     created_date = models.DateTimeField(default=timezone.now)
     training = models.ForeignKey('Training', related_name='comments', blank=True, null=True, on_delete=models.CASCADE)

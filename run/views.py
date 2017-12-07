@@ -5,8 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-
-# Create your views here.
 from django.views import View
 from django.views.generic import CreateView
 from rest_framework import status
@@ -14,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from run.forms import CommentForm
-from run.models import Training, Person, Comment
+from run.models import Training, Person
 from run.serializers import TrainingSerializer, PersonSerializer
 
 
